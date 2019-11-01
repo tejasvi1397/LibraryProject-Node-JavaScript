@@ -1,0 +1,59 @@
+li {
+    font-size: 25px;
+}
+li img {
+    width: 150px;
+    height: 200px;
+}
+/* #div_lib_inner1{
+   font-size: 30px; 
+} */
+
+/* #add_lib_ok_button{
+    display: inline-block;
+} */
+body {
+    /* background-image: url(images/background-image.png); */
+    background-color: #99b2f0;
+}
+#user_reg_form{
+    display: block;
+}
+#h1-id{
+    padding: 20px;
+    text-align: center;
+}
+#user_reg_form , #h1-id{
+    margin: auto;
+    width: 45%;
+}
+#div1_2{
+    font-size: 30px;
+    text-align: center;
+}
+#div_lib_inner1{
+    margin: auto;
+    width: 100%;
+    text-align: center;
+}
+#div_lib_add{
+    text-align: start;
+}
+#div_lib_remove{
+    text-align: start;
+}
+#div_lib_change{
+    text-align: start;
+}
+#add_item_lib_name, #add_item_lib_img, #add_item_lib_BCD, #add_item_lib_duedate, #add_item_lib_button{
+    margin: 7px;
+    /* clear: both; */
+    display: inline-block;
+    /* float: left; */
+}
+#remove_item_lib_name, #remove_item_lib_button{
+    margin: 7px;
+}
+#change_item_lib_name, #change_item_lib_duedate, #change_item_lib_button{
+    margin: 7px;
+}
