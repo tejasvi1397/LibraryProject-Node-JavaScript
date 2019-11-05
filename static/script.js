@@ -383,9 +383,11 @@ function add_item_lib(){
 
                             "Book/CD: <input type=\"text\" id=\"add_item_lib_BCD\"><br>"+
 
+                            "Quantity: <input type=\"text\" id=\"add_item_lib_quantity\"><br>"+
+
                             "Due(in days): <input type=\"text\" id=\"add_item_lib_duedate\"><br>"+
 
-                            "<button id = \"add_item_lib_button\" type=\"button\" onclick=\"add_item_lib_data()\">Add Item</button>";
+                            "<button id = \"add_item_lib_button\" type=\"button\" onclick=\"add_item_lib_data(); post_data();\">Add Item</button>";
 
     document.getElementById("div_lib_inner1").appendChild(div_lib_add);
 
@@ -507,3 +509,65 @@ function change_item_lib_data(){
     document.getElementById("available_basket_div").style.visibility = "visible";
     document.getElementById("div_lib_change").style.display = "none";
 }
+
+    // //Fetch for POST(Create element Lab3)
+    // // const POST_url = '/'
+    // // const POST_url = '/library';
+function post_data(){
+    const POST_url = 'http://localhost:8080/library/create';
+    var create_data = {
+        name: document.getElementById("add_item_lib_name").value,
+        type: document.getElementById("add_item_lib_BCD").value,
+        image: document.getElementById("add_item_lib_img").value,
+        quantity: document.getElementById("add_item_lib_quantity").value,
+        loan_period: document.getElementById("add_item_lib_duedate").value
+    };
+
+    var post_request = new Request(POST_url,{
+        method: 'POST',
+        headers:{
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(create_data)
+        // headers: new Headers(),
+        // body: create_data
+    });
+
+    fetch(post_request)
+        // .then((res) => res.json())
+    // .then(function (data) {  
+    //     console.log('fetch post success: ', data);  
+    //     })
+    .then(res => {
+        if(res.ok){
+            return res;
+        }
+        else{
+            throw Error(`Request rejected with status ${res.status}`);
+        }
+    })
+    // .then((res) => res.body())
+    .catch(function (error){
+        console.log("fetch post failed : ", error);
+    });
+}
+
+// const POST_url = 'http://localhost:8080/library/create';
+// var create_data = {
+//     name: document.getElementById("add_item_lib_name"),
+//     type: document.getElementById("add_item_lib_BCD"),
+//     quantity: document.getElementById("add_item_lib_quantity"),
+//     loan_period: document.getElementById("add_item_lib_duedate")
+// };
+// let fetchData = { 
+//     method: 'POST', 
+//     body: create_data,
+//     headers: new Headers()
+// }
+// fetch(POST_url, fetchData)
+// .then(function (data) {  
+//     console.log('fetch post success: ', data);
+// })
+// .catch(function (error){
+//     console.log("fetch post failed : ", error);
+// });
