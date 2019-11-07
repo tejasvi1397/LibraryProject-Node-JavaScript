@@ -376,6 +376,8 @@ function add_item_lib(){
     var div_lib_add= document.createElement("div");
     div_lib_add.id="div_lib_add";
     div_lib_add.innerHTML= "<h3>Enter Item Details to Add</h3><br>"+
+                            
+                            "ID: <input type=\"text\" id=\"add_item_lib_id\"><br>"+
 
                             "Name: <input type=\"text\" id=\"add_item_lib_name\"><br>"+
 
@@ -468,11 +470,15 @@ function change_item_lib(){
     div_lib_change.id="div_lib_change";
     div_lib_change.innerHTML= "<h3>Enter Item Details to Change Due Date </h3><br>"+
 
+                            "ID: <input type=\"text\" id=\"change_item_lib_id\"><br>"+
+
                             "Name: <input type=\"text\" id=\"change_item_lib_name\"><br> "+
 
-                            "New Duration(in days): <input type=\"number\" id=\"change_item_lib_duedate\"><br>"+
+                            "Quantity: <input type=\"text\" id=\"change_item_lib_quantity\"><br>"+
 
-                            "<button id = \"change_item_lib_button\" type=\"button\" onclick=\"change_item_lib_data()\">Change</button>";
+                            "Loan Period: <input type=\"number\" id=\"change_item_lib_duedate\"><br>"+
+
+                            "<button id = \"change_item_lib_button\" type=\"button\" onclick=\"change_item_lib_data(); put_data();\">Change</button>";
 
     document.getElementById("div_lib_inner1").appendChild(div_lib_change); 
 
@@ -516,6 +522,7 @@ function change_item_lib_data(){
 function post_data(){
     const POST_url = 'http://localhost:8080/library/create';
     var create_data = {
+        _id: document.getElementById("add_item_lib_id").value,
         name: document.getElementById("add_item_lib_name").value,
         type: document.getElementById("add_item_lib_BCD").value,
         image: document.getElementById("add_item_lib_img").value,
@@ -552,22 +559,31 @@ function post_data(){
     });
 }
 
-// const POST_url = 'http://localhost:8080/library/create';
-// var create_data = {
-//     name: document.getElementById("add_item_lib_name"),
-//     type: document.getElementById("add_item_lib_BCD"),
-//     quantity: document.getElementById("add_item_lib_quantity"),
-//     loan_period: document.getElementById("add_item_lib_duedate")
-// };
-// let fetchData = { 
-//     method: 'POST', 
-//     body: create_data,
-//     headers: new Headers()
-// }
-// fetch(POST_url, fetchData)
-// .then(function (data) {  
-//     console.log('fetch post success: ', data);
-// })
-// .catch(function (error){
-//     console.log("fetch post failed : ", error);
-// });
+//Fetch for PUT (Update quantity and loan Period)
+
+function put_data(){
+    var update_data = {
+        quantity: document.getElementById("change_item_lib_quantity").value,
+        loan_period: document.getElementById("change_item_lib_duedate").value
+    };
+    var x_change_id = document.getElementById("change_item_lib_id").value;
+    var put_request = new Request('http://localhost:8080/library/' + x_change_id + '/update',{
+        method: 'PUT',
+        headers:{
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(update_data)
+    });
+    fetch(put_request)
+    .then(res => {
+        if(res.ok){
+            return res;
+        }
+        else{
+            throw Error(`Request rejected with status ${res.status}`);
+        }
+    })
+    .catch(function (error){
+        console.log("fetch post failed : ", error);
+    });
+}
