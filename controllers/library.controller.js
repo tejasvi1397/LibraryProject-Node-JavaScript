@@ -24,6 +24,13 @@ exports.library_update = function (req, res) {
     Library.findByIdAndUpdate(req.params.id, {$set: req.body}, function (err, library) {
         if (err) return next(err);
         res.send(library);
-        res.send('Quantity udpated.');
+        res.send('Item udpated.');
     });
+};
+
+exports.library_delete = function (req, res) {
+    Library.findByIdAndRemove(req.params.id, function (err) {
+        if (err) return next(err);
+        res.send('Deleted successfully!');
+    })
 };

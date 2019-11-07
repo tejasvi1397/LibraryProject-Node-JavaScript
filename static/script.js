@@ -424,9 +424,11 @@ function remove_item_lib(){
     div_lib_remove.id="div_lib_remove";
     div_lib_remove.innerHTML= "<h3>Enter Item Details to Remove</h3><br>"+
 
+                            "ID: <input type=\"text\" id=\"remove_item_lib_id\"><br>"+
+
                             "Name: <input type=\"text\" id=\"remove_item_lib_name\"><br>"+
 
-                            "<button id = \"remove_item_lib_button\" type=\"button\" onclick=\"remove_item_lib_data()\">Remove Item</button>";
+                            "<button id = \"remove_item_lib_button\" type=\"button\" onclick=\"remove_item_lib_data(); delete_data();\">Remove Item</button>";
 
     document.getElementById("div_lib_inner1").appendChild(div_lib_remove);
 }
@@ -575,6 +577,27 @@ function put_data(){
         body: JSON.stringify(update_data)
     });
     fetch(put_request)
+    .then(res => {
+        if(res.ok){
+            return res;
+        }
+        else{
+            throw Error(`Request rejected with status ${res.status}`);
+        }
+    })
+    .catch(function (error){
+        console.log("fetch post failed : ", error);
+    });
+}
+
+//Fetch for DELETE
+
+function delete_data(){
+    var x_remove_id = document.getElementById("remove_item_lib_id").value;
+    var delete_request = new Request('http://localhost:8080/library/' + x_remove_id + '/delete',{
+        method: 'DELETE'
+    });
+    fetch(delete_request)
     .then(res => {
         if(res.ok){
             return res;
