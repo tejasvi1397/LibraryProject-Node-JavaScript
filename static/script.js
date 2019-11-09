@@ -45,7 +45,7 @@ function form_validation() {
 
         //display functionality buttons.
         var div_lib_buttons= document.createElement("div");
-        div_lib_buttons.innerHTML= "<br><div id=div_lib_buttons_inner1><button type=\"button\" onclick=\"add_item_lib()\">Add</button>   <button type=\"button\" onclick=\"remove_item_lib()\">Remove</button>   <button type=\"button\" onclick=\"change_item_lib()\">Change</button>   <button type=\"button\" onclick=\"find_item_lib()\">Find Item</button>  <button type=\"button\" onclick=\"document.location.reload(true)\">Log Out</button></div>";
+        div_lib_buttons.innerHTML= "<br><div id=div_lib_buttons_inner1><button type=\"button\" onclick=\"add_item_lib()\">Add</button>   <button type=\"button\" onclick=\"remove_item_lib()\">Delete</button>   <button type=\"button\" onclick=\"change_item_lib()\">Update</button>   <button type=\"button\" onclick=\"find_item_lib()\">Find Item</button>  <button type=\"button\" onclick=\"document.location.reload(true)\">Log Out</button></div>";
         document.getElementById("div_lib_inner1").appendChild(div_lib_buttons);
 
     }
@@ -386,7 +386,7 @@ function add_item_lib(){
 
                             "Book/CD: <input type=\"text\" id=\"add_item_lib_BCD\"><br>"+
 
-                            "Quantity: <input type=\"text\" id=\"add_item_lib_quantity\"><br>"+
+                            "Quantity: <input type=\"number\" id=\"add_item_lib_quantity\"><br>"+
 
                             "Due(in days): <input type=\"text\" id=\"add_item_lib_duedate\"><br>"+
 
@@ -429,7 +429,7 @@ function remove_item_lib(){
 
                             "Name: <input type=\"text\" id=\"remove_item_lib_name\"><br>"+
 
-                            "<button id = \"remove_item_lib_button\" type=\"button\" onclick=\"remove_item_lib_data(); delete_data();\">Remove Item</button>";
+                            "<button id = \"remove_item_lib_button\" type=\"button\" onclick=\"remove_item_lib_data(); delete_data();\">Delete Item</button>";
 
     document.getElementById("div_lib_inner1").appendChild(div_lib_remove);
 }
@@ -477,11 +477,11 @@ function change_item_lib(){
 
                             "Name: <input type=\"text\" id=\"change_item_lib_name\"><br> "+
 
-                            "Quantity: <input type=\"text\" id=\"change_item_lib_quantity\"><br>"+
+                            "Quantity: <input type=\"number\" id=\"change_item_lib_quantity\"><br>"+
 
                             "Loan Period: <input type=\"number\" id=\"change_item_lib_duedate\"><br>"+
 
-                            "<button id = \"change_item_lib_button\" type=\"button\" onclick=\"change_item_lib_data(); put_data();\">Change</button>";
+                            "<button id = \"change_item_lib_button\" type=\"button\" onclick=\"change_item_lib_data(); put_data();\">Update</button>";
 
     document.getElementById("div_lib_inner1").appendChild(div_lib_change); 
 
@@ -540,42 +540,54 @@ function find_item_lib(){
     // // const POST_url = '/library';
 function post_data(){
     const POST_url = 'http://localhost:8080/library/create';
-    var create_data = {
-        _id: document.getElementById("add_item_lib_id").value,
-        name: document.getElementById("add_item_lib_name").value,
-        type: document.getElementById("add_item_lib_BCD").value,
-        image: document.getElementById("add_item_lib_img").value,
-        quantity: document.getElementById("add_item_lib_quantity").value,
-        loan_period: document.getElementById("add_item_lib_duedate").value
-    };
+    var post_id = document.getElementById("add_item_lib_id").value;
+    var post_name = document.getElementById("add_item_lib_name").value;
+    var post_type = document.getElementById("add_item_lib_BCD").value;
+    var post_image = document.getElementById("add_item_lib_img").value;
+    var post_quantity = document.getElementById("add_item_lib_quantity").value;
+    var post_loan_period = document.getElementById("add_item_lib_duedate").value;
+    var sanitize_ln = /[^A-Za-z0-9]+/;
+    if(post_id != "" || post_name!= "" || post_type!= "" || Boolean(post_id.match(sanitize_ln)) || Boolean(post_type.match(/book/i)) || Boolean(post_type.match(/cd/i))){
+        var create_data = {
+            _id: post_id,
+            name: post_name,
+            type: post_type,
+            image: post_image,
+            quantity: post_quantity,
+            loan_period: post_loan_period
+        };
 
-    var post_request = new Request(POST_url,{
-        method: 'POST',
-        headers:{
-            'Content-Type' : 'application/json'
-        },
-        body: JSON.stringify(create_data)
-        // headers: new Headers(),
-        // body: create_data
-    });
+        var post_request = new Request(POST_url,{
+            method: 'POST',
+            headers:{
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(create_data)
+            // headers: new Headers(),
+            // body: create_data
+        });
 
-    fetch(post_request)
-        // .then((res) => res.json())
-    // .then(function (data) {  
-    //     console.log('fetch post success: ', data);  
-    //     })
-    .then(res => {
-        if(res.ok){
-            return res;
-        }
-        else{
-            throw Error(`Request rejected with status ${res.status}`);
-        }
-    })
-    // .then((res) => res.body())
-    .catch(function (error){
-        console.log("fetch post failed : ", error);
-    });
+        fetch(post_request)
+            // .then((res) => res.json())
+        // .then(function (data) {  
+        //     console.log('fetch post success: ', data);  
+        //     })
+        .then(res => {
+            if(res.ok){
+                return res;
+            }
+            else{
+                throw Error(`Request rejected with status ${res.status}`);
+            }
+        })
+        // .then((res) => res.body())
+        .catch(function (error){
+            console.log("fetch post failed : ", error);
+        });
+    }
+    else{
+        console.log("Input not sanitized");
+    }
 }
 
 //Fetch for PUT (Update quantity and loan Period)
@@ -668,34 +680,40 @@ function get_data_all(){
 //Fetch GET by ID
 function get_data_by_id(){
     var x_find_id = document.getElementById("find_item_lib_id").value;
-    const get_url = 'http://localhost:8080/library/' + x_find_id + '/find';
-    var div_find_list = document.createElement("div");
-    div_find_list.id = "div_find_list_id";
-    var find_ol = document.createElement("ol");
-    find_ol.id = "find_ol_id";
-    var find_li = document.createElement("li");
-    find_li.id = "find_li_id";
+    if(x_find_id != ""){
+        const get_url = 'http://localhost:8080/library/' + x_find_id + '/find';
+        var div_find_list = document.createElement("div");
+        div_find_list.id = "div_find_list_id";
+        var find_ol = document.createElement("ol");
+        find_ol.id = "find_ol_id";
+        var find_li = document.createElement("li");
+        find_li.id = "find_li_id";
 
-    fetch(get_url)
-    .then(response => response.json())
-    .then(data =>{
-        console.log(data.name);
-        if(data._id == x_find_id){
-            find_li.innerHTML = "<img src = \"images/" + data.image + ".jpg\"><br>"+ data.name;
-            var find_li_due = document.createElement("p");
-            find_li_due.innerHTML = "Due in " + data.loan_period + " days";
-            find_li.appendChild(find_li_due);
-            var find_li_quantity = document.createElement("p");
-            find_li_quantity.innerHTML = "Quantity: " + data.quantity;
-            find_li.appendChild(find_li_quantity);
-        }
-    
-    })
-    .catch(function(error){
-        console.log("fetch GET find by id failed : ", error);
-    })
-    document.getElementById("div_lib_inner1").appendChild(div_find_list);
-    document.getElementById("div_find_list_id").appendChild(find_ol);
-    document.getElementById("find_ol_id").appendChild(find_li);
-    // document.getElementById("div_lib_find").style.display = "none";
+        fetch(get_url)
+        .then(response => response.json())
+        .then(data =>{
+            console.log(data.name);
+            if(data._id == x_find_id){
+                find_li.innerHTML = "<img src = \"images/" + data.image + ".jpg\"><br>"+ data.name;
+                var find_li_due = document.createElement("p");
+                find_li_due.innerHTML = "Due in " + data.loan_period + " days";
+                find_li.appendChild(find_li_due);
+                var find_li_quantity = document.createElement("p");
+                find_li_quantity.innerHTML = "Quantity: " + data.quantity;
+                find_li.appendChild(find_li_quantity);
+            }
+        
+        })
+        .catch(function(error){
+            console.log("fetch GET find by id failed : ", error);
+        })
+        document.getElementById("div_lib_inner1").appendChild(div_find_list);
+        document.getElementById("div_find_list_id").appendChild(find_ol);
+        document.getElementById("find_ol_id").appendChild(find_li);
+        // document.getElementById("div_lib_find").style.display = "none";
+    }
+    else{
+        alert("Enter Valid Details");
+    }
 }
+
