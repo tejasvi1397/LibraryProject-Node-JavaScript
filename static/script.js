@@ -671,11 +671,31 @@ function get_data_by_id(){
     const get_url = 'http://localhost:8080/library/' + x_find_id + '/find';
     var div_find_list = document.createElement("div");
     div_find_list.id = "div_find_list_id";
-    var find_ul = document.createElement("ul");
-    find_ul.id = "find_ul_id";
+    var find_ol = document.createElement("ol");
+    find_ol.id = "find_ol_id";
     var find_li = document.createElement("li");
     find_li.id = "find_li_id";
+
+    fetch(get_url)
+    .then(response => response.json())
+    .then(data =>{
+        console.log(data.name);
+        if(data._id == x_find_id){
+            find_li.innerHTML = "<img src = \"images/" + data.image + ".jpg\"><br>"+ data.name;
+            var find_li_due = document.createElement("p");
+            find_li_due.innerHTML = "Due in " + data.loan_period + " days";
+            find_li.appendChild(find_li_due);
+            var find_li_quantity = document.createElement("p");
+            find_li_quantity.innerHTML = "Quantity: " + data.quantity;
+            find_li.appendChild(find_li_quantity);
+        }
+    
+    })
+    .catch(function(error){
+        console.log("fetch GET find by id failed : ", error);
+    })
     document.getElementById("div_lib_inner1").appendChild(div_find_list);
-    document.getElementById("div_find_list_id").appendChild(find_ul);
-    document.getElementById("find_ul_id").appendChild(find_li);
+    document.getElementById("div_find_list_id").appendChild(find_ol);
+    document.getElementById("find_ol_id").appendChild(find_li);
+    // document.getElementById("div_lib_find").style.display = "none";
 }

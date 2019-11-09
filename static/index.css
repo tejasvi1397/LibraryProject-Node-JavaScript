@@ -48,6 +48,9 @@ body {
 #div_lib_find{
     text-align: start;
 }
+#div_find_list, #find_li_id{
+    text-align: start;
+}
 #add_item_lib_name, #add_item_lib_img, #add_item_lib_BCD, #add_item_lib_duedate, #add_item_lib_button{
     margin: 7px;
     /* clear: both; */
