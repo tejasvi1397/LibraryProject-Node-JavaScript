@@ -34,3 +34,17 @@ exports.library_delete = function (req, res) {
         res.send('Deleted successfully!');
     })
 };
+
+exports.library_findall = function (req, res) {
+    Library.find(function (err, library) {
+        if (err) return next(err);
+        res.send(library);
+    })
+};
+
+exports.library_findbyID = function (req, res) {
+    Library.findById(req.params.id, function (err, library) {
+        if (err) return next(err);
+        res.send(library);
+    })
+};

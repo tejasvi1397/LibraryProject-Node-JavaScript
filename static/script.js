@@ -45,7 +45,7 @@ function form_validation() {
 
         //display functionality buttons.
         var div_lib_buttons= document.createElement("div");
-        div_lib_buttons.innerHTML= "<br><div id=div_lib_buttons_inner1><button type=\"button\" onclick=\"add_item_lib()\">Add</button>   <button type=\"button\" onclick=\"remove_item_lib()\">Remove</button>   <button type=\"button\" onclick=\"change_item_lib()\">Change</button>   <button type=\"button\" onclick=\"document.location.reload(true)\">Log Out</button></div>";
+        div_lib_buttons.innerHTML= "<br><div id=div_lib_buttons_inner1><button type=\"button\" onclick=\"add_item_lib()\">Add</button>   <button type=\"button\" onclick=\"remove_item_lib()\">Remove</button>   <button type=\"button\" onclick=\"change_item_lib()\">Change</button>   <button type=\"button\" onclick=\"find_item_lib()\">Find Item</button>  <button type=\"button\" onclick=\"document.location.reload(true)\">Log Out</button></div>";
         document.getElementById("div_lib_inner1").appendChild(div_lib_buttons);
 
     }
@@ -70,6 +70,7 @@ function form_validation() {
         document.getElementsByTagName("BODY")[0].replaceChild(div1 , document.getElementById("user_reg_form"));
 
         document.getElementById("available_basket_div").style.visibility = "visible";
+        get_data_all();
 
     }
     
@@ -518,6 +519,22 @@ function change_item_lib_data(){
     document.getElementById("div_lib_change").style.display = "none";
 }
 
+function find_item_lib(){
+
+    document.getElementById("available_basket_div").style.visibility= 'hidden';
+    var div_lib_find= document.createElement("div");
+    div_lib_find.id="div_lib_remove";
+    div_lib_find.innerHTML= "<h3>Enter Item Details to Find</h3><br>"+
+
+                            "ID: <input type=\"text\" id=\"find_item_lib_id\"><br>"+
+
+                            "Name: <input type=\"text\" id=\"find_item_lib_name\"><br>"+
+
+                            "<button id = \"find_item_lib_button\" type=\"button\" onclick=\"get_data_by_id()\">Find Item</button>";
+
+    document.getElementById("div_lib_inner1").appendChild(div_lib_find);
+}
+
     // //Fetch for POST(Create element Lab3)
     // // const POST_url = '/'
     // // const POST_url = '/library';
@@ -609,4 +626,56 @@ function delete_data(){
     .catch(function (error){
         console.log("fetch post failed : ", error);
     });
+}
+
+//Fetch for GET for all //should work when submitting initial form
+function get_data_all(){
+    fetch('http://localhost:8080/library/find')
+    .then(response => response.json())
+    .then(data =>{
+        console.log(data.length);
+        data.forEach((element,i) => {
+            console.log(element);
+            console.log(i);
+            index = 10+i;
+            console.log(index);
+            if(element.name != "" || element.type!= "" || element._id != ""){
+                var add_item_lib_li = document.createElement("li");
+                add_item_lib_li.id = element._id;
+                // var temp_remove_button = document.createElement("button");
+                // temp_remove_button.id = element._id+"_remove_button";
+                type_BCD.push(element.type);
+                due_dates_arr.push(element.loan_period);
+                add_item_lib_li.innerHTML = "<img src = \"images/" + element.image + ".jpg\"><br>"+ element.name + " <button id = \"fetch_get_item_lib_button" +index+"\" type = \"button\">Add</button>";
+                document.getElementById("available-items").appendChild(add_item_lib_li);
+                var add_item_lib_li_due = document.createElement("p");
+                add_item_lib_li_due.innerHTML = "Due in " + element.loan_period + " days";
+                add_item_lib_li.appendChild(add_item_lib_li_due);
+                var add_item_lib_li_quantity = document.createElement("p");
+                add_item_lib_li_quantity.innerHTML = "Quantity: " + element.quantity;
+                add_item_lib_li.appendChild(add_item_lib_li_quantity);
+                document.getElementById("fetch_get_item_lib_button"+index).onclick = function() {available_to_basket(element._id, element._id+"_remove_button", index)};
+            }
+        })
+    })
+    .catch(function(error){
+        console.log("fetch GET failed : ", error)
+    }) 
+}
+
+// add_item_lib_li.innerHTML = "<img src = \"images/" + element.image + ".jpg\"><br>"+ element.name + " <button type = \"button\" onclick = \"available_to_basket("+ element._id +" , "+element._id+"_remove_button,  " + index + ")\" >Add</button>";
+
+//Fetch GET by ID
+function get_data_by_id(){
+    var x_find_id = document.getElementById("find_item_lib_id").value;
+    const get_url = 'http://localhost:8080/library/' + x_find_id + '/find';
+    var div_find_list = document.createElement("div");
+    div_find_list.id = "div_find_list_id";
+    var find_ul = document.createElement("ul");
+    find_ul.id = "find_ul_id";
+    var find_li = document.createElement("li");
+    find_li.id = "find_li_id";
+    document.getElementById("div_lib_inner1").appendChild(div_find_list);
+    document.getElementById("div_find_list_id").appendChild(find_ul);
+    document.getElementById("find_ul_id").appendChild(find_li);
 }

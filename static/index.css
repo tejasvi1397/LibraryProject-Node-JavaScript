@@ -45,6 +45,9 @@ body {
 #div_lib_change{
     text-align: start;
 }
+#div_lib_find{
+    text-align: start;
+}
 #add_item_lib_name, #add_item_lib_img, #add_item_lib_BCD, #add_item_lib_duedate, #add_item_lib_button{
     margin: 7px;
     /* clear: both; */
@@ -55,5 +58,8 @@ body {
     margin: 7px;
 }
 #change_item_lib_name, #change_item_lib_duedate, #change_item_lib_button{
+    margin: 7px;
+}
+#find_item_lib_id, #find_item_lib_name, #find_item_lib_button{
     margin: 7px;
 }
