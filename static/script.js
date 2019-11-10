@@ -700,7 +700,8 @@ async function call_async_poll(){
 function get_data_by_id(){
     var x_find_id = document.getElementById("find_item_lib_id").value;
     if(x_find_id != ""){
-        const get_url = 'http://localhost:8080/library/' + x_find_id + '/find';
+        // const get_url = 'http://localhost:8080/library/' + x_find_id + '/find';
+        const get_url = '/library/' + x_find_id + '/find';
         var div_find_list = document.createElement("div");
         div_find_list.id = "div_find_list_id";
         var find_ol = document.createElement("ol");
