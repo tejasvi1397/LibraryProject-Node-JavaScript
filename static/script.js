@@ -643,7 +643,8 @@ function delete_data(){
 
 //Fetch for GET for all //should work when submitting initial form
 function get_data_all(){
-    fetch('http://localhost:8080/library/find')
+    // fetch('http://localhost:8080/library/find')
+    fetch('/library/find')
     .then(response => response.json())
     .then(data =>{
         console.log(data.length);
