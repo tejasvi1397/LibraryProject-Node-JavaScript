@@ -540,7 +540,8 @@ function find_item_lib(){
     // // const POST_url = '/'
     // // const POST_url = '/library';
 function post_data(){
-    const POST_url = 'http://localhost:8080/library/create';
+    // const POST_url = 'http://localhost:8080/library/create';
+    const POST_url = '/library/create';
     var post_id = document.getElementById("add_item_lib_id").value;
     var post_name = document.getElementById("add_item_lib_name").value;
     var post_type = document.getElementById("add_item_lib_BCD").value;
@@ -599,7 +600,8 @@ function put_data(){
         loan_period: document.getElementById("change_item_lib_duedate").value
     };
     var x_change_id = document.getElementById("change_item_lib_id").value;
-    var put_request = new Request('http://localhost:8080/library/' + x_change_id + '/update',{
+    // var put_request = new Request('http://localhost:8080/library/' + x_change_id + '/update',{
+    var put_request = new Request('/library/' + x_change_id + '/update',{
         method: 'PUT',
         headers:{
             'Content-Type' : 'application/json'
@@ -624,7 +626,8 @@ function put_data(){
 
 function delete_data(){
     var x_remove_id = document.getElementById("remove_item_lib_id").value;
-    var delete_request = new Request('http://localhost:8080/library/' + x_remove_id + '/delete',{
+    // var delete_request = new Request('http://localhost:8080/library/' + x_remove_id + '/delete',{
+    var delete_request = new Request('/library/' + x_remove_id + '/delete',{
         method: 'DELETE'
     });
     fetch(delete_request)
