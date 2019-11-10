@@ -71,6 +71,7 @@ function form_validation() {
 
         document.getElementById("available_basket_div").style.visibility = "visible";
         get_data_all();
+        // call_async_poll();
 
     }
     
@@ -615,7 +616,7 @@ function put_data(){
         }
     })
     .catch(function (error){
-        console.log("fetch post failed : ", error);
+        console.log("fetch PUT failed : ", error);
     });
 }
 
@@ -636,7 +637,7 @@ function delete_data(){
         }
     })
     .catch(function (error){
-        console.log("fetch post failed : ", error);
+        console.log("fetch DELETE failed : ", error);
     });
 }
 
@@ -673,6 +674,20 @@ function get_data_all(){
     .catch(function(error){
         console.log("fetch GET failed : ", error)
     }) 
+}
+function async_poll_5sec(){
+    return new Promise(resolve => {
+    setTimeout(() => {
+        get_data_all();        
+        console.log('Async polling after 5 secs');
+        resolve('done'); 
+        },5000);
+    });   
+ }
+async function call_async_poll(){
+    while(true){
+        await async_poll_5sec();
+    }
 }
 
 // add_item_lib_li.innerHTML = "<img src = \"images/" + element.image + ".jpg\"><br>"+ element.name + " <button type = \"button\" onclick = \"available_to_basket("+ element._id +" , "+element._id+"_remove_button,  " + index + ")\" >Add</button>";
