@@ -70,8 +70,8 @@ function form_validation() {
         document.getElementsByTagName("BODY")[0].replaceChild(div1 , document.getElementById("user_reg_form"));
 
         document.getElementById("available_basket_div").style.visibility = "visible";
-        get_data_all();
-        // call_async_poll();
+        // get_data_all();
+        call_async_poll();
 
     }
     
@@ -402,7 +402,7 @@ function add_item_lib_data(){
     var x_add_duedate = document.getElementById("add_item_lib_duedate").value;
     var x_add_img = document.getElementById("add_item_lib_img").value;
 
-    if(x_add_name != "" || x_add_bcd != "" || x_add_duedate != ""){
+    if(x_add_name != "" || x_add_bcd != "" || x_add_duedate != ""){ //added for input sanitization
         var add_item_lib_li = document.createElement("li");
         add_item_lib_li.innerHTML = "<img src = \"images/" + x_add_img + ".jpg\"><br>"+ x_add_name + " <button>Add</button>";
         document.getElementById("available-items").appendChild(add_item_lib_li);
@@ -413,7 +413,7 @@ function add_item_lib_data(){
         add_item_lib_li.appendChild(add_item_lib_li_due);
     }
     else{
-        alert("Enter valid details");
+        alert("Enter valid details"); //added for input sanitization
         return false;
     }
     document.getElementById("available_basket_div").style.visibility = "visible";
@@ -436,7 +436,7 @@ function remove_item_lib(){
 }
 function remove_item_lib_data(){
     var x_remove_name = document.getElementById("remove_item_lib_name").value;
-    if(x_remove_name != ""){
+    if(x_remove_name != ""){ //added for input sanitization
         var remove_available_ol = document.getElementById("available-items");
         var remove_available_li = remove_available_ol.getElementsByTagName("li");
         function count_available_list_items(){
@@ -490,7 +490,7 @@ function change_item_lib(){
 function change_item_lib_data(){
     var x_change_name = document.getElementById("change_item_lib_name").value;
     var x_change_duedate = document.getElementById("change_item_lib_duedate").value;
-    if(x_change_name != "" || x_change_duedate != ""){
+    if(x_change_name != "" || x_change_duedate != ""){ //added for input sanitization
         var change_available_ol = document.getElementById("available-items");
         var change_available_li = change_available_ol.getElementsByTagName("li");
         function count_available_list_items(){
@@ -513,7 +513,7 @@ function change_item_lib_data(){
             console.log(due_dates_arr);
         }
     else{
-        alert("Enter Valid Details");
+        alert("Enter Valid Details"); //added for input sanitization
         return false;
     }
     document.getElementById("available_basket_div").style.visibility = "visible";
@@ -548,8 +548,8 @@ function post_data(){
     var post_image = document.getElementById("add_item_lib_img").value;
     var post_quantity = document.getElementById("add_item_lib_quantity").value;
     var post_loan_period = document.getElementById("add_item_lib_duedate").value;
-    var sanitize_ln = /[^A-Za-z0-9]+/;
-    if(post_id != "" || post_name!= "" || post_type!= "" || Boolean(post_id.match(sanitize_ln)) || Boolean(post_type.match(/book/i)) || Boolean(post_type.match(/cd/i))){
+    var sanitize_ln = /[^A-Za-z0-9]+/; //added for input sanitization lab 3
+    if(post_id != "" || post_name!= "" || post_type!= "" || Boolean(post_id.match(sanitize_ln)) || Boolean(post_type.match(/book/i)) || Boolean(post_type.match(/cd/i))){ //added for input sanitization lab 3
         var create_data = {
             _id: post_id,
             name: post_name,
